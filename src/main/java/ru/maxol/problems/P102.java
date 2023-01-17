@@ -6,37 +6,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class P102 {
-    public List<List<Integer>> levelOrder(TreeNode root) {
+    public static List<List<Integer>> levelOrder(TreeNode root) {
         if (root == null) return new ArrayList<>();
-        TreeNode temp = root;
         List<List<Integer>> result = new ArrayList<>();
         List<TreeNode> notUsed = new ArrayList<>();
-        List<Integer> gopa = new ArrayList<>();
-        gopa.add(temp.val);
-        notUsed.add(temp);
-        result.add(gopa);
+        notUsed.add(root);
+        result.add(List.of(root.val));
         List<TreeNode> tempTree = new ArrayList<>();
+        List<Integer> elementsAll = new ArrayList<>();
         while (!notUsed.isEmpty()) {
-            TreeNode treeNode = notUsed.get(0);
-
-            notUsed.remove(0);
             List<Integer> element = new ArrayList<>();
+            TreeNode treeNode = notUsed.get(0);
+            notUsed.remove(0);
             if (treeNode.left != null) {
                 TreeNode left = treeNode.left;
-                notUsed.add(left);
                 tempTree.add(left);
                 element.add(left.val);
             }
             if (treeNode.right != null) {
                 TreeNode right = treeNode.right;
-                notUsed.add(right);
                 tempTree.add(right);
                 element.add(right.val);
             }
 
+            elementsAll.addAll(element);
             if (notUsed.isEmpty()) {
-                notUsed = tempTree;
-                result.add(element);
+                notUsed.addAll(tempTree);
+                tempTree.clear();
+                if (!elementsAll.isEmpty()) {
+                    result.add(new ArrayList<>(elementsAll));
+                    elementsAll.clear();
+                }
             }
         }
         return result;
